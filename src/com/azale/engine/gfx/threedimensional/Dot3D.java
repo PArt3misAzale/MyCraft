@@ -2,9 +2,9 @@ package com.azale.engine.gfx.threedimensional;
 
 public class Dot3D {
 
-    public float x, y, z;
+    public double x, y, z;
 
-    public Dot3D(float givenX, float givenY, float givenZ) {
+    public Dot3D(double givenX, double givenY, double givenZ) {
 
         x = givenX;
         y = givenY;
@@ -18,19 +18,19 @@ public class Dot3D {
 
      */
 
-    public float getX() {
+    public double getX() {
 
         return x;
     }
 
 
-    public float getY() {
+    public double getY() {
 
         return y;
 
     }
 
-    public float getZ() {
+    public double getZ() {
 
         return z;
 
