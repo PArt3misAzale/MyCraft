@@ -3,6 +3,8 @@ package com.azale.engine.renderer;
 import com.azale.engine.GameContainer;
 import com.azale.engine.gfx.Image;
 import com.azale.engine.gfx.ImageTile;
+import com.azale.engine.gfx.threedimensional.Vector3D;
+import com.azale.tests.Triangle2D;
 
 import java.awt.image.DataBufferInt;
 
@@ -281,6 +283,64 @@ public class Renderer {
             for (int x = newX; x <= newWidth; x++) {
 
                 setPixel(x + offX, y + offY, color);
+
+            }
+
+        }
+
+    }
+
+    public void drawTriangle(Triangle2D triangle, int offX, int offY, int color){
+
+        for (int x = (int)triangle.dots[0].getX(); x <= (int)triangle.dots[1].getX(); x++) {
+
+            setPixel(x + offX, offY + triangle.getVectorEquation2D(new Vector3D(triangle.dots[0], triangle.dots[1]), x), color);
+
+        }
+
+        for (int x = (int)triangle.dots[2].getX(); x <= (int)triangle.dots[1].getX(); x++) {
+
+            setPixel(x + offX, offY + triangle.getVectorEquation2D(new Vector3D(triangle.dots[1], triangle.dots[2]), x), color);
+
+        }
+
+        for (int x = (int)triangle.dots[2].getX(); x <= (int)triangle.dots[0].getX(); x++) {
+
+            setPixel(x + offX, offY + triangle.getVectorEquation2D(new Vector3D(triangle.dots[2], triangle.dots[0]), x), color);
+
+        }
+
+    }
+
+    public void drawFillTriangle(Triangle2D triangle, int offX, int offY, int color){
+
+        for (int x = (int)triangle.dots[0].getX(); x <= (int)triangle.dots[1].getX(); x++) {
+
+            setPixel(x + offX, offY + triangle.getVectorEquation2D(new Vector3D(triangle.dots[0], triangle.dots[1]), x), color);
+
+        }
+
+        for (int x = (int)triangle.dots[2].getX(); x <= (int)triangle.dots[1].getX(); x++) {
+
+            setPixel(x + offX, offY + triangle.getVectorEquation2D(new Vector3D(triangle.dots[1], triangle.dots[2]), x), color);
+
+        }
+
+        for (int x = (int)triangle.dots[2].getX(); x <= (int)triangle.dots[0].getX(); x++) {
+
+            setPixel(x + offX, offY + triangle.getVectorEquation2D(new Vector3D(triangle.dots[2], triangle.dots[0]), x), color);
+
+        }
+
+        for (int y = 0; y < triangle.getMaxY(); y++) {
+
+            for (int x = 0; x < triangle.getMaxY(); x++) {
+
+                if (y > triangle.getVectorEquation2D(new Vector3D(triangle.dots[0], triangle.dots[1]), x) && y > triangle.getVectorEquation2D(new Vector3D(triangle.dots[2], triangle.dots[0]), x)) {
+
+                    setPixel(x + offX, y + offY, color);
+
+                }
 
             }
 

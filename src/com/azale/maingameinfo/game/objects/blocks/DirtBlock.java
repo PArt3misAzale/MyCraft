@@ -2,18 +2,18 @@ package com.azale.maingameinfo.game.objects.blocks;
 
 import com.azale.engine.gfx.threedimensional.objects.Cube3D;
 import com.azale.engine.gfx.threedimensional.Dot3D;
-import com.azale.engine.gfx.threedimensional.Line3D;
+import com.azale.engine.gfx.threedimensional.Vector3D;
 
 public class DirtBlock extends Cube3D {
 
-    Line3D vertex0;
-    Line3D vertex1;
-    Line3D vertex2;
-    Line3D vertex3;
-    Line3D vertex4;
-    Line3D vertex5;
-    Line3D vertex6;
-    Line3D vertex7;
+    Vector3D vertex0;
+    Vector3D vertex1;
+    Vector3D vertex2;
+    Vector3D vertex3;
+    Vector3D vertex4;
+    Vector3D vertex5;
+    Vector3D vertex6;
+    Vector3D vertex7;
 
     /**
      * EXEMPLES
@@ -30,7 +30,7 @@ public class DirtBlock extends Cube3D {
      * <p>Dot 7 : (1,1,1)
      *
      * <p>VARIBALES
-     * <p>- {@link Line3D} of the {@link DirtBlock} :
+     * <p>- {@link Vector3D} of the {@link DirtBlock} :
      * <p>Vertex 0 : ({@code dot0}, {@code dot1})
      * <p>Vertex 1 : ({@code dot2}, {@code dot3})
      * <p>Vertex 2 : ({@code dot4}, {@code dot5})
@@ -77,14 +77,14 @@ public class DirtBlock extends Cube3D {
         dots[6] = dot6;
         dots[7] = dot7;
 
-        vertex0 = new Line3D(dot0, dot1);
-        vertex1 = new Line3D(dot2, dot3);
-        vertex2 = new Line3D(dot4, dot5);
-        vertex3 = new Line3D(dot6, dot7);
-        vertex4 = new Line3D(dot0, dot2);
-        vertex5 = new Line3D(dot1, dot3);
-        vertex6 = new Line3D(dot4, dot6);
-        vertex7 = new Line3D(dot5, dot7);
+        vertex0 = new Vector3D(dot0, dot1);
+        vertex1 = new Vector3D(dot2, dot3);
+        vertex2 = new Vector3D(dot4, dot5);
+        vertex3 = new Vector3D(dot6, dot7);
+        vertex4 = new Vector3D(dot0, dot2);
+        vertex5 = new Vector3D(dot1, dot3);
+        vertex6 = new Vector3D(dot4, dot6);
+        vertex7 = new Vector3D(dot5, dot7);
 
         faces[0] = vertex0;
         faces[1] = vertex1;
