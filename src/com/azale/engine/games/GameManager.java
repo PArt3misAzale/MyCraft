@@ -4,7 +4,7 @@ import com.azale.engine.AbstractGame;
 import com.azale.engine.GameContainer;
 import com.azale.engine.gfx.threedimensional.Dot3D;
 import com.azale.engine.renderer.Renderer;
-import com.azale.tests.Triangle2D;
+import com.azale.engine.gfx.objects.Triangle2D;
 
 public class GameManager extends AbstractGame {
 

@@ -86,14 +86,14 @@ public class DirtBlock extends Cube3D {
         vertex6 = new Vector3D(dot4, dot6);
         vertex7 = new Vector3D(dot5, dot7);
 
-        faces[0] = vertex0;
-        faces[1] = vertex1;
-        faces[2] = vertex2;
-        faces[3] = vertex3;
-        faces[4] = vertex4;
-        faces[5] = vertex5;
-        faces[6] = vertex6;
-        faces[7] = vertex7;
+        lines[0] = vertex0;
+        lines[1] = vertex1;
+        lines[2] = vertex2;
+        lines[3] = vertex3;
+        lines[4] = vertex4;
+        lines[5] = vertex5;
+        lines[6] = vertex6;
+        lines[7] = vertex7;
 
         width = givenWidth;
         height = givenHeight;

@@ -2,22 +2,27 @@ package com.azale.engine;
 
 import com.azale.engine.inputs.Input;
 import com.azale.engine.renderer.Renderer;
+import com.azale.maingameinfo.worldgeneration.biomemap.NoiseMap;
+
+import java.awt.*;
 
 public class GameContainer implements Runnable {
 
     private Thread thread;
-    private com.azale.engine.Window window;
+    private Window window;
     public Renderer renderer;
     private Input input;
+
+    private NoiseMap noiseMap;
 
     private static AbstractGame game;
 
     private boolean running = false;
     private final double UPDATE_CAP = 1.0/60.0;
 
-    private int width = 1200; // 16 * 75
-    private int height = 675; // 9 *
-    private float scale = 1.5f;
+    private int width = 1600; // 16 * 100
+    private int height = 900; // 9 * 100
+    private float scale = 1f;
     private String title = "MyCraft";
 
     // FPS
@@ -28,6 +33,10 @@ public class GameContainer implements Runnable {
     public GameContainer(AbstractGame game) {
 
         this.game = game;
+
+        // GAME INFORMATION
+        // MAP CREATION
+        this.noiseMap = new NoiseMap("0");
 
     }
 
@@ -51,6 +60,8 @@ public class GameContainer implements Runnable {
     }
 
     public void run() {
+
+        noiseMap.paint();
 
         running = true;
 

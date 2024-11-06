@@ -21,10 +21,14 @@ public class Window {
         // CANVAS
         canvas = new Canvas();
 
+        /*
         Dimension s = new Dimension((int)(gc.getWidth() * gc.getScale()), (int)(gc.getHeight() * gc.getScale()));
         canvas.setPreferredSize(s);
         canvas.setMaximumSize(s);
         canvas.setMinimumSize(s);
+         */
+
+        canvas.setSize(Toolkit.getDefaultToolkit().getScreenSize());
 
         // WINDOW
         frame = new JFrame(gc.getTitle());
@@ -32,6 +36,7 @@ public class Window {
 
         frame.setLayout(new BorderLayout());
         frame.add(canvas, BorderLayout.CENTER);
+        frame.setUndecorated(true);
         frame.pack();
 
         frame.setLocationRelativeTo(null);
