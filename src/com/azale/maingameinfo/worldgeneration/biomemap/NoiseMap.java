@@ -9,7 +9,8 @@ import java.util.Random;
 
 public class NoiseMap {
 
-    TerrainAltitude[][] terrain;
+    BiomeTerrain[][] terrainA;
+    BiomeTerrain[][] terrainB;
 
     int scale = 1;
     int mapWidth, mapHeight;
@@ -25,40 +26,177 @@ public class NoiseMap {
     public void paint(){
 
 
-        mapWidth = 512 / scale;
-        mapHeight = 512 / scale;
+        mapWidth = 16384;
+        mapHeight = 16384;
 
-        BufferedImage image = new BufferedImage(mapWidth * 4, mapHeight * 4, BufferedImage.TYPE_INT_RGB);
+        BufferedImage image = new BufferedImage(mapWidth , mapHeight, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = image.createGraphics();
-        g2.fillRect(0, 0, mapWidth, mapHeight);
 
-        terrain = new TerrainAltitude[mapHeight + 2][mapWidth + 2];
+        // ISLANDS
+        terrainA = new BiomeTerrain[mapHeight/4096][mapWidth/4096];
+
+        // FIRST ZOOM
+        terrainB = new BiomeTerrain[mapHeight/2048][mapWidth/2048];
 
         Random randomNum = new Random();
 
-        for (int j = 0; j < mapHeight + 2; j ++) {
+        for (int y = 0; y < mapHeight/4096; y++) {
 
-            for (int i = 0; i < mapWidth + 2; i++) {
+            for (int x = 0; x < mapWidth/4096; x++) {
 
-                terrain[j][i] = new TerrainAltitude();
-                terrain[j][i].altitude = - 5;
+                terrainA[y][x] = new BiomeTerrain();
+
+                int value = randomNum.nextInt(20);
+
+                if (value < 2) {
+
+                    terrainA[y][x].biome = 1;
+
+                }
+
+                drawP(terrainA, x, y,4096, 4096, 4096, g2);
+
+                System.out.println(x + " X / Y " + y);
 
             }
 
         }
 
-        for (int i = 0; i < 10 ; i++) {
-            for (int y = 1; y < mapHeight - 1; y++) {
+        for (int j = 0; j < 4; j++) {
 
-                for (int x = 1; x < mapWidth - 1; x++) {
+            for (int i = 0; i < 4; i++) {
 
-                    terrain[y][x].altitude = 2 * noiseAltitude(terrain, x, y);
-                    terrain[y][x].color = calcColor(terrain, x, y);
-                    drawAltitude(terrain, g2, x , y );
+                System.out.println(terrainA[j][i].biome);
 
-                    System.out.println(i+1);
+            }
+
+        }
+
+        // SAVING
+        try {
+
+            ImageIO.write(image, "png", new File("noisemap_" + nameFile + "_4x4.png"));
+
+        } catch (IOException e) {
+
+            throw new RuntimeException(e);
+
+        }
+
+        // ZOOM
+        for (int j = 0; j < mapHeight/2048; j++) {
+
+            for (int i = 0; i < mapWidth/2048; i++) {
+
+                terrainB[j][i] = new BiomeTerrain();
+
+            }
+
+        }
+
+        for (int j = 0; j < mapHeight/4096; j++) {
+
+            for (int i = 0; i < mapWidth/4096; i++) {
+
+                terrainB[j][i].biome = terrainA[j][i].biome;
+                terrainB[j][i+1].biome = terrainA[j][i].biome;
+                terrainB[j+1][i].biome = terrainA[j][i].biome;
+                terrainB[j+1][i+1].biome = terrainA[j][i].biome;
+
+            }
+
+        }
+
+        // ADD ISLAND
+        for (int y = 0; y < mapHeight/2048; y++) {
+
+            for (int x = 0; x < mapWidth/2048; x++) {
+
+                int value = randomNum.nextInt(10);
+
+                if (value < 2) {
+
+                    if (terrainB[y][x].biome == 1) {
+
+                        terrainB[y][x].biome = 0;
+
+                    } else if (terrainB[y][x].biome == 0) {
+
+                        if (x > 0 && x < mapWidth/2048-1 && y > 0 && y < mapHeight/2048-1) {
+
+                            if (terrainB[y][x + 1].biome == 1 || terrainB[y][x - 1].biome == 1 || terrainB[y + 1][x].biome == 1 || terrainB[y - 1][x].biome == 1 || terrainB[y + 1][x + 1].biome == 1 || terrainB[y - 1][x - 1].biome == 1 || terrainB[y - 1][x + 1].biome == 1 || terrainB[y + 1][x - 1].biome == 1) {
+
+                                terrainB[y][x].biome = 1;
+
+                            }
+
+                        } else if (x == 0 && y == 0) {
+
+                            if (terrainB[y][x + 1].biome == 1 || terrainB[y + 1][x].biome == 1 || terrainB[y + 1][x + 1].biome == 1) {
+
+                                terrainB[y][x].biome = 1;
+
+                            }
+
+                        } else if (x == mapWidth/2048-1 && y == mapHeight/2048-1) {
+
+                            if (terrainB[y][x - 1].biome == 1 || terrainB[y - 1][x].biome == 1 || terrainB[y - 1][x - 1].biome == 1) {
+
+                                terrainB[y][x].biome = 1;
+
+                            }
+
+                        } else if (x == 0 && y != 0) {
+
+                            if (terrainB[y][x + 1].biome == 1 || terrainB[y + 1][x].biome == 1 || terrainB[y - 1][x].biome == 1|| terrainB[y + 1][x + 1].biome == 1 || terrainB[y - 1][x + 1].biome == 1) {
+
+                                terrainB[y][x].biome = 1;
+
+                            }
+
+                        } else if (x != 0 && y == 0) {
+
+                            if (terrainB[y + 1][x].biome == 1 || terrainB[y][x + 1].biome == 1 || terrainB[y][x - 1].biome == 1|| terrainB[y + 1][x + 1].biome == 1 || terrainB[y + 1][x - 1].biome == 1) {
+
+                                terrainB[y][x].biome = 1;
+
+                            }
+
+                        } else if (x == mapWidth/2048-1 && y != mapHeight/2048-1) {
+
+                            if (terrainB[y + 1][x].biome == 1 || terrainB[y - 1][x].biome == 1 || terrainB[y][x - 1].biome == 1|| terrainB[y + 1][x - 1].biome == 1 || terrainB[y - 1][x - 1].biome == 1) {
+
+                                terrainB[y][x].biome = 1;
+
+                            }
+
+                        } else if (x != mapWidth/2048-1 && y == mapHeight/2048-1) {
+
+                            if (terrainB[y][x + 1].biome == 1 || terrainB[y][x - 1].biome == 1 || terrainB[y - 1][x].biome == 1|| terrainB[y - 1][x + 1].biome == 1 || terrainB[y - 1][x - 1].biome == 1) {
+
+                                terrainB[y][x].biome = 1;
+
+                            }
+
+                        }
+
+                    }
 
                 }
+
+                drawP(terrainB, x, y,2048, 2048, 4096, g2);
+
+                System.out.println(x + " X / Y " + y);
+
+            }
+
+        }
+
+        for (int j = 0; j < 4; j++) {
+
+            for (int i = 0; i < 4; i++) {
+
+                System.out.println(terrainB[j][i].biome);
 
             }
 
@@ -66,7 +204,7 @@ public class NoiseMap {
 
         try {
 
-            ImageIO.write(image, "png", new File("noisemap" + nameFile + ".png"));
+            ImageIO.write(image, "png", new File("noisemap_" + nameFile + "_final.png"));
 
         } catch (IOException e) {
 
@@ -76,415 +214,19 @@ public class NoiseMap {
 
     }
 
-    public Color calcColor(TerrainAltitude[][] terrain, int x, int y) {
+    public void drawP(BiomeTerrain[][] terrain, int x, int y, int width, int height, int scale, Graphics2D g2){
 
-        terrain[y][x].color = Color.WHITE;
+        if (terrain[y][x].biome == 0) {
 
-        if (terrain[y][x].altitude < 0) {
+            g2.setColor(Color.BLUE);
 
-            if (terrain[y][x].altitude < -1) {
+        } else if (terrain[y][x].biome == 1) {
 
-                if (terrain[y][x].altitude < -2) {
-
-                    if (terrain[y][x].altitude < -3){
-
-                        if (terrain[y][x].altitude < -4) {
-
-                            if (terrain[y][x].altitude == -5) {
-
-                                terrain[y][x].color = Color.BLACK;
-
-                            }
-
-                        } else {
-
-                            terrain[y][x].color = Color.BLUE;
-
-                        }
-
-                    } else {
-
-                        terrain[y][x].color = Color.DARK_GRAY;
-
-                    }
-
-                } else {
-
-                    terrain[y][x].color = Color.GRAY;
-
-                }
-
-            } else {
-
-                terrain[y][x].color = Color.LIGHT_GRAY;
-
-            }
-
-        } else if (terrain[y][x].altitude > 0) {
-
-            if (terrain[y][x].altitude > 1) {
-
-                if (terrain[y][x].altitude > 2) {
-
-                    if (terrain[y][x].altitude > 3) {
-
-                        if (terrain[y][x].altitude > 4) {
-
-                            if (terrain[y][x].altitude == 5) {
-
-                                terrain[y][x].color = Color.MAGENTA;
-
-                            } else {
-
-                                terrain[y][x].color = Color.RED;
-
-                            }
-
-                        } else {
-
-                            terrain[y][x].color = Color.ORANGE;
-
-                        }
-
-                    } else {
-
-                        terrain[y][x].color = Color.YELLOW;
-
-                    }
-
-                } else {
-
-                    terrain[y][x].color = Color.GREEN;
-
-                }
-
-            }
+            g2.setColor(Color.GREEN);
 
         }
 
-        return terrain[y][x].color;
-
-    }
-
-    public void drawAltitude(TerrainAltitude[][] terrain, Graphics2D g2, int x, int y) {
-
-        g2.setColor(terrain[y][x].color);
-        g2.fillRect(x * 4, y * 4, scale * 4, scale * 4);
-
-    }
-
-    public float noiseAltitude(TerrainAltitude[][] terrain, int x, int y) {
-
-        System.out.println(x + " X / Y " + y);
-
-        float value = 0;
-
-        Random randomNum = new Random();
-
-        if (x > 0 && x < mapWidth && y > 0 && y < mapHeight) {
-
-            if (terrain[y][x - 1].altitude >= -5
-                    && terrain[y][x + 1].altitude >= -5
-                    && terrain[y - 1][x].altitude >= -5
-                    && terrain[y + 1][x].altitude >= -5
-
-                    && terrain[y][x - 1].altitude < -4
-                    && terrain[y][x + 1].altitude < -4
-                    && terrain[y - 1][x].altitude < -4
-                    && terrain[y + 1][x].altitude < -4) {
-
-                value = randomNum.nextFloat(2) - 5;
-
-            } else if (terrain[y][x - 1].altitude >= -4
-                    && terrain[y][x + 1].altitude >= -4
-                    && terrain[y - 1][x].altitude >= -4
-                    && terrain[y + 1][x].altitude >= -4
-
-                    && terrain[y][x - 1].altitude < -3
-                    && terrain[y][x + 1].altitude < -3
-                    && terrain[y - 1][x].altitude < -3
-                    && terrain[y + 1][x].altitude < -3) {
-
-                value = randomNum.nextFloat(2) - 4;
-
-            } else if (terrain[y][x - 1].altitude >= -3
-                    && terrain[y][x + 1].altitude >= -3
-                    && terrain[y - 1][x].altitude >= -3
-                    && terrain[y + 1][x].altitude >= -3
-
-                    && terrain[y][x - 1].altitude < -2
-                    && terrain[y][x + 1].altitude < -2
-                    && terrain[y - 1][x].altitude < -2
-                    && terrain[y + 1][x].altitude < -2) {
-
-                value = randomNum.nextFloat(2) - 3;
-
-            } else if (terrain[y][x - 1].altitude >= -2
-                    && terrain[y][x + 1].altitude >= -2
-                    && terrain[y - 1][x].altitude >= -2
-                    && terrain[y + 1][x].altitude >= -2
-
-                    && terrain[y][x - 1].altitude < -1
-                    && terrain[y][x + 1].altitude < -1
-                    && terrain[y - 1][x].altitude < -1
-                    && terrain[y + 1][x].altitude < -1) {
-
-                value = randomNum.nextFloat(2) - 2;
-
-            } else if (terrain[y][x - 1].altitude >= -1
-                    && terrain[y][x + 1].altitude >= -1
-                    && terrain[y - 1][x].altitude >= -1
-                    && terrain[y + 1][x].altitude >= -1
-
-                    && terrain[y][x - 1].altitude < 0
-                    && terrain[y][x + 1].altitude < 0
-                    && terrain[y - 1][x].altitude < 0
-                    && terrain[y + 1][x].altitude < 0) {
-
-                value = randomNum.nextFloat(2) - 1;
-
-            } else if (terrain[y][x - 1].altitude >= 0
-                    && terrain[y][x + 1].altitude >= 0
-                    && terrain[y - 1][x].altitude >= 0
-                    && terrain[y + 1][x].altitude >= 0
-
-                    && terrain[y][x - 1].altitude < 1
-                    && terrain[y][x + 1].altitude < 1
-                    && terrain[y - 1][x].altitude < 1
-                    && terrain[y + 1][x].altitude < 1) {
-
-                value = randomNum.nextFloat(2);
-
-            } else if (terrain[y][x - 1].altitude >= 1
-                    && terrain[y][x + 1].altitude >= 1
-                    && terrain[y - 1][x].altitude >= 1
-                    && terrain[y + 1][x].altitude >= 1
-
-                    && terrain[y][x - 1].altitude < 2
-                    && terrain[y][x + 1].altitude < 2
-                    && terrain[y - 1][x].altitude < 2
-                    && terrain[y + 1][x].altitude < 2) {
-
-                value = randomNum.nextFloat(2) + 1;
-
-            } else if (terrain[y][x - 1].altitude >= 2
-                    && terrain[y][x + 1].altitude >= 2
-                    && terrain[y - 1][x].altitude >= 2
-                    && terrain[y + 1][x].altitude >= 2
-
-                    && terrain[y][x - 1].altitude < 3
-                    && terrain[y][x + 1].altitude < 3
-                    && terrain[y - 1][x].altitude < 3
-                    && terrain[y + 1][x].altitude < 3) {
-
-                value = randomNum.nextFloat(2) + 2;
-
-            } else if (terrain[y][x - 1].altitude >= 3
-                    && terrain[y][x + 1].altitude >= 3
-                    && terrain[y - 1][x].altitude >= 3
-                    && terrain[y + 1][x].altitude >= 3
-
-                    && terrain[y][x - 1].altitude < 4
-                    && terrain[y][x + 1].altitude < 4
-                    && terrain[y - 1][x].altitude < 4
-                    && terrain[y + 1][x].altitude < 4) {
-
-                value = randomNum.nextFloat(2) + 3;
-
-            } else if (terrain[y][x - 1].altitude >= 4
-                    && terrain[y][x + 1].altitude >= 4
-                    && terrain[y - 1][x].altitude >= 4
-                    && terrain[y + 1][x].altitude >= 4
-
-                    && terrain[y][x - 1].altitude < 5
-                    && terrain[y][x + 1].altitude < 5
-                    && terrain[y - 1][x].altitude < 5
-                    && terrain[y + 1][x].altitude < 5) {
-
-                value = randomNum.nextFloat(2) + 4;
-
-            }
-
-        }
-        else if (x == 0 || y == 0 || x == mapWidth - 1 || y == mapHeight -1) {
-
-            value = randomNum.nextFloat(10) - 5;
-
-        }
-        /*
-        else if ((x == mapWidth - 1 || y == mapHeight - 1) && (x != 0 || y != 0)) {
-
-            if (terrain[y][x - 1].altitude >= -5
-                    && terrain[y - 1][x].altitude >= -5
-
-                    && terrain[y][x - 1].altitude < -4
-                    && terrain[y - 1][x].altitude < -4) {
-
-                value = randomNum.nextFloat(2) - 5;
-
-            } else if (terrain[y][x - 1].altitude >= -4
-                    && terrain[y - 1][x].altitude >= -4
-
-                    && terrain[y][x - 1].altitude < -3
-                    && terrain[y - 1][x].altitude < -3) {
-
-                value = randomNum.nextFloat(2) - 4;
-
-            } else if (terrain[y][x - 1].altitude >= -3
-                    && terrain[y - 1][x].altitude >= -3
-
-                    && terrain[y][x - 1].altitude < -2
-                    && terrain[y - 1][x].altitude < -2) {
-
-                value = randomNum.nextFloat(2) - 3;
-
-            } else if (terrain[y][x - 1].altitude >= -2
-                    && terrain[y - 1][x].altitude >= -2
-
-                    && terrain[y][x - 1].altitude < -1
-                    && terrain[y - 1][x].altitude < -1) {
-
-                value = randomNum.nextFloat(2) - 2;
-
-            } else if (terrain[y][x - 1].altitude >= -1
-                    && terrain[y - 1][x].altitude >= -1
-
-                    && terrain[y][x - 1].altitude < 0
-                    && terrain[y - 1][x].altitude < 0) {
-
-                value = randomNum.nextFloat(2) - 1;
-
-            } else if (terrain[y][x - 1].altitude >= 0
-                    && terrain[y - 1][x].altitude >= 0
-
-                    && terrain[y][x - 1].altitude < 1
-                    && terrain[y - 1][x].altitude < 1) {
-
-                value = randomNum.nextFloat(2);
-
-            } else if (terrain[y][x - 1].altitude >= 1
-                    && terrain[y - 1][x].altitude >= 1
-
-                    && terrain[y][x - 1].altitude < 2
-                    && terrain[y - 1][x].altitude < 2) {
-
-                value = randomNum.nextFloat(2) + 1;
-
-            } else if (terrain[y][x - 1].altitude >= 2
-                    && terrain[y - 1][x].altitude >= 2
-
-                    && terrain[y][x - 1].altitude < 3
-                    && terrain[y - 1][x].altitude < 3) {
-
-                value = randomNum.nextFloat(2) + 2;
-
-            } else if (terrain[y][x - 1].altitude >= 3
-                    && terrain[y - 1][x].altitude >= 3
-
-                    && terrain[y][x - 1].altitude < 4
-                    && terrain[y - 1][x].altitude < 4) {
-
-                value = randomNum.nextFloat(2) + 3;
-
-            } else if (terrain[y][x - 1].altitude >= 4
-                    && terrain[y - 1][x].altitude >= 4
-
-                    && terrain[y][x - 1].altitude < 5
-                    && terrain[y - 1][x].altitude < 5) {
-
-                value = randomNum.nextFloat(2) + 4;
-
-            }
-
-        }
-        else if ((x == 0 || y == 0) && (x != mapWidth || y != mapHeight)) {
-
-            if (terrain[y][x + 1].altitude >= -5
-                    && terrain[y + 1][x].altitude >= -5
-
-                    && terrain[y][x + 1].altitude < -4
-                    && terrain[y + 1][x].altitude < -4){
-
-                value = randomNum.nextFloat(2) - 5;
-
-            } else if (terrain[y][x + 1].altitude >= -4
-                    && terrain[y + 1][x].altitude >= -4
-
-                    && terrain[y][x + 1].altitude < -3
-                    && terrain[y + 1][x].altitude < -3){
-
-                value = randomNum.nextFloat(2) - 4;
-
-            } else if (terrain[y][x + 1].altitude >= -3
-                    && terrain[y + 1][x].altitude >= -3
-
-                    && terrain[y][x + 1].altitude < -2
-                    && terrain[y + 1][x].altitude < -2){
-
-                value = randomNum.nextFloat(2) - 3;
-
-            } else if (terrain[y][x + 1].altitude >= -2
-                    && terrain[y + 1][x].altitude >= -2
-
-                    && terrain[y][x + 1].altitude < -1
-                    && terrain[y + 1][x].altitude < -1){
-
-                value = randomNum.nextFloat(2) - 2;
-
-            } else if (terrain[y][x + 1].altitude >= -1
-                    && terrain[y + 1][x].altitude >= -1
-
-                    && terrain[y][x + 1].altitude < 0
-                    && terrain[y + 1][x].altitude < 0){
-
-                value = randomNum.nextFloat(2) - 1;
-
-            } else if (terrain[y][x + 1].altitude >= 0
-                    && terrain[y + 1][x].altitude >= 0
-
-                    && terrain[y][x + 1].altitude < 1
-                    && terrain[y + 1][x].altitude < 1){
-
-                value = randomNum.nextFloat(2);
-
-            } else if (terrain[y][x + 1].altitude >= 1
-                    && terrain[y + 1][x].altitude >= 1
-
-                    && terrain[y][x + 1].altitude < 2
-                    && terrain[y + 1][x].altitude < 2){
-
-                value = randomNum.nextFloat(2) + 1;
-
-            } else if (terrain[y][x + 1].altitude >= 2
-                    && terrain[y + 1][x].altitude >= 2
-
-                    && terrain[y][x + 1].altitude < 3
-                    && terrain[y + 1][x].altitude < 3){
-
-                value = randomNum.nextFloat(2) + 2;
-
-            } else if (terrain[y][x + 1].altitude >= 3
-                    && terrain[y + 1][x].altitude >= 3
-
-                    && terrain[y][x + 1].altitude < 4
-                    && terrain[y + 1][x].altitude < 4){
-
-                value = randomNum.nextFloat(2) + 3;
-
-            } else if (terrain[y][x + 1].altitude >= 4
-                    && terrain[y + 1][x].altitude >= 4
-
-                    && terrain[y][x + 1].altitude < 5
-                    && terrain[y + 1][x].altitude < 5){
-
-                value = randomNum.nextFloat(2) + 3;
-
-            }
-
-        }
-
-             */
-        return value;
+        g2.fillRect(x * scale, y * scale, width, height);
 
     }
 

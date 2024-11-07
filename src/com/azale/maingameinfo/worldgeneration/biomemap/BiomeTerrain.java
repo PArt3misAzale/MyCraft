@@ -2,14 +2,14 @@ package com.azale.maingameinfo.worldgeneration.biomemap;
 
 import java.awt.*;
 
-public class TerrainAltitude {
+public class BiomeTerrain {
 
-    public float altitude;
+    public float biome;
     public Color color;
 
-    public TerrainAltitude() {
+    public BiomeTerrain() {
 
-        altitude = 0;
+        biome = 0;
 
     }
 
