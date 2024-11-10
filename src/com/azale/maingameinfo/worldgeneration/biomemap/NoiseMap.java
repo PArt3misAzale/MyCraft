@@ -3,11 +3,15 @@ package com.azale.maingameinfo.worldgeneration.biomemap;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.Arrays;
 import java.util.Random;
 
+import static java.lang.Math.pow;
+
 public class NoiseMap {
+
+    int seed;
 
     BiomeTerrain[][] terrainA;
     BiomeTerrain[][] terrainB;
@@ -17,9 +21,47 @@ public class NoiseMap {
 
     String nameFile;
 
-    public NoiseMap(String name) {
+    public NoiseMap(String name, int seedValue) {
 
         nameFile = name;
+
+        seed = seedValue;
+
+        /*
+        try {
+
+            InputStream is = getClass().getResourceAsStream("src/rsc/gameVariables/pi.txt");
+            if (is == null) {
+
+                System.out.println("The file pi.txt is nowhere to be found");
+
+            }
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+            for (int i = 0; i < 100001; i++) {
+
+                String line = br.readLine();
+
+                String numbers[] = line.split("");
+
+                seed = Integer.parseInt(numbers[seedValue]) * seedValue;
+
+                if ( Integer.parseInt(numbers[seedValue]) == 0) {
+
+                    seed += (int)(seedValue * pow(10, 2));
+
+                }
+
+            }
+
+            System.out.println(seed);
+
+        } catch (Exception e) {
+
+            System.out.println("There is an error : " + Arrays.toString(e.getStackTrace()));
+
+        }
+         */
 
     }
 
