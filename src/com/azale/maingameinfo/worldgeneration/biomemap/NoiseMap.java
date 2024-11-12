@@ -21,52 +21,18 @@ public class NoiseMap {
 
     String nameFile;
 
+    SeedVariables sV;
+
     public NoiseMap(String name, int seedValue) {
 
-        nameFile = name;
+        this.nameFile = name;
 
-        seed = seedValue;
-
-        /*
-        try {
-
-            InputStream is = getClass().getResourceAsStream("src/rsc/gameVariables/pi.txt");
-            if (is == null) {
-
-                System.out.println("The file pi.txt is nowhere to be found");
-
-            }
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-
-            for (int i = 0; i < 100001; i++) {
-
-                String line = br.readLine();
-
-                String numbers[] = line.split("");
-
-                seed = Integer.parseInt(numbers[seedValue]) * seedValue;
-
-                if ( Integer.parseInt(numbers[seedValue]) == 0) {
-
-                    seed += (int)(seedValue * pow(10, 2));
-
-                }
-
-            }
-
-            System.out.println(seed);
-
-        } catch (Exception e) {
-
-            System.out.println("There is an error : " + Arrays.toString(e.getStackTrace()));
-
-        }
-         */
+        this.seed = seedValue;
+        this.sV = new SeedVariables(seed);
 
     }
 
     public void paint(){
-
 
         mapWidth = 16384;
         mapHeight = 16384;
@@ -82,42 +48,88 @@ public class NoiseMap {
 
         Random randomNum = new Random();
 
+        int[] value = sV.getValue4X4();
+
         for (int y = 0; y < mapHeight/4096; y++) {
 
             for (int x = 0; x < mapWidth/4096; x++) {
 
                 terrainA[y][x] = new BiomeTerrain();
 
-                int value = randomNum.nextInt(20);
+            }
 
-                if (value < 2) {
+        }
 
-                    terrainA[y][x].biome = 1;
+        // First value
+        if (value[0] < 3) {
 
-                }
+            terrainA[0][value[0]].biome = 1;
 
-                drawP(terrainA, x, y,4096, 4096, 4096, g2);
+        } else if (value[0] < 7) {
 
+            terrainA[1][value[0] - 4].biome = 1;
+
+        } else if (value[0] < 11) {
+
+            terrainA[2][value[0] - 8].biome = 1;
+
+        } else if (value[0] < 15) {
+
+            terrainA[3][value[0] - 12].biome = 1;
+
+        }
+        // Second value
+        if (value[1] < 3) {
+
+            terrainA[3][value[1]].biome = 1;
+
+        } else if (value[1] < 7) {
+
+            terrainA[2][4 - value[1]].biome = 1;
+
+        } else if (value[1] < 11) {
+
+            terrainA[1][8 - value[1]].biome = 1;
+
+        } else if (value[1] < 15) {
+
+            terrainA[0][12 - value[1]].biome = 1;
+
+        }
+        // Third value
+        if (value[2] < 3) {
+
+            terrainA[0][value[2]].biome = 1;
+
+        } else if (value[2] < 7) {
+
+            terrainA[1][value[2] - 4].biome = 1;
+
+        } else if (value[2] < 11) {
+
+            terrainA[2][value[2] - 8].biome = 1;
+
+        } else if (value[2] < 15) {
+
+            terrainA[3][value[2] - 12].biome = 1;
+
+        }
+
+        for (int y = 0; y < 4 ; y++) {
+
+            for (int x = 0; x < 4; x++) {
+
+                drawP(terrainA, x, y, 4, 4, scale, g2);
+                System.out.println(terrainA[y][x].biome);
                 System.out.println(x + " X / Y " + y);
 
             }
 
         }
 
-        for (int j = 0; j < 4; j++) {
-
-            for (int i = 0; i < 4; i++) {
-
-                System.out.println(terrainA[j][i].biome);
-
-            }
-
-        }
-
-        // SAVING
         try {
 
-            ImageIO.write(image, "png", new File("noisemap_" + nameFile + "_4x4.png"));
+            ImageIO.write(image, "png", new File("rsc/game/maps/noisemap/noisemap_" + nameFile + "_4x4.png"));
 
         } catch (IOException e) {
 
@@ -125,6 +137,7 @@ public class NoiseMap {
 
         }
 
+/*
         // ZOOM
         for (int j = 0; j < mapHeight/2048; j++) {
 
@@ -246,13 +259,15 @@ public class NoiseMap {
 
         try {
 
-            ImageIO.write(image, "png", new File("noisemap_" + nameFile + "_final.png"));
+            ImageIO.write(image, "png", new File("rsc/game/maps/noisemap/noisemap_" + nameFile + "_final.png"));
 
         } catch (IOException e) {
 
             throw new RuntimeException(e);
 
         }
+
+         */
 
     }
 
@@ -261,10 +276,12 @@ public class NoiseMap {
         if (terrain[y][x].biome == 0) {
 
             g2.setColor(Color.BLUE);
+            System.out.println("Biome = Ocean");
 
         } else if (terrain[y][x].biome == 1) {
 
             g2.setColor(Color.GREEN);
+            System.out.println("Biome = Land");
 
         }
 

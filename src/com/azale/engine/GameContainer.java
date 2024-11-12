@@ -36,7 +36,7 @@ public class GameContainer implements Runnable {
 
         // GAME INFORMATION
         // MAP CREATION
-        this.noiseMap = new NoiseMap("0", 1);
+        this.noiseMap = new NoiseMap("0", 4);
 
     }
 
