@@ -1,8 +1,8 @@
-package com.azale.engine.gfx.objects;
+package com.azale.engine.gfx.twodimensional.objects;
 
 import com.azale.engine.gfx.threedimensional.Dot3D;
 import com.azale.engine.gfx.threedimensional.Vector3D;
-import com.azale.engine.gfx.threedimensional.objects.Triangle;
+import com.azale.engine.gfx.twodimensional.Triangle;
 
 public class Triangle2D extends Triangle {
 

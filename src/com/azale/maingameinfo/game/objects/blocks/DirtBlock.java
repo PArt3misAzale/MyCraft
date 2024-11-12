@@ -1,19 +1,15 @@
 package com.azale.maingameinfo.game.objects.blocks;
 
+import com.azale.engine.gfx.twodimensional.CubeTexture;
 import com.azale.engine.gfx.threedimensional.objects.Cube3D;
 import com.azale.engine.gfx.threedimensional.Dot3D;
 import com.azale.engine.gfx.threedimensional.Vector3D;
 
 public class DirtBlock extends Cube3D {
 
-    Vector3D vertex0;
-    Vector3D vertex1;
-    Vector3D vertex2;
-    Vector3D vertex3;
-    Vector3D vertex4;
-    Vector3D vertex5;
-    Vector3D vertex6;
-    Vector3D vertex7;
+    CubeTexture textures;
+
+    Dot3D originDot;
 
     /**
      * EXEMPLES
@@ -57,46 +53,46 @@ public class DirtBlock extends Cube3D {
      * @param givenHeight
      */
 
-    public DirtBlock(Dot3D dot0,
-                     Dot3D dot1,
-                     Dot3D dot2,
-                     Dot3D dot3,
-                     Dot3D dot4,
-                     Dot3D dot5,
-                     Dot3D dot6,
-                     Dot3D dot7,
-                     double givenWidth,
-                     double givenHeight) {
+    public DirtBlock(Dot3D originDot,
+                     double width,
+                     double height,
+                     double depth,
+                     CubeTexture textures) {
 
-        dots[0] = dot0;
-        dots[1] = dot1;
-        dots[2] = dot2;
-        dots[3] = dot3;
-        dots[4] = dot4;
-        dots[5] = dot5;
-        dots[6] = dot6;
-        dots[7] = dot7;
+        this.width = width;
+        this.height = height;
+        this.depth = depth;
 
-        vertex0 = new Vector3D(dot0, dot1);
-        vertex1 = new Vector3D(dot2, dot3);
-        vertex2 = new Vector3D(dot4, dot5);
-        vertex3 = new Vector3D(dot6, dot7);
-        vertex4 = new Vector3D(dot0, dot2);
-        vertex5 = new Vector3D(dot1, dot3);
-        vertex6 = new Vector3D(dot4, dot6);
-        vertex7 = new Vector3D(dot5, dot7);
+        this.originDot = originDot;
 
-        lines[0] = vertex0;
-        lines[1] = vertex1;
-        lines[2] = vertex2;
-        lines[3] = vertex3;
-        lines[4] = vertex4;
-        lines[5] = vertex5;
-        lines[6] = vertex6;
-        lines[7] = vertex7;
+        this.dots[0] = originDot;
+        this.dots[1] = new Dot3D(originDot.getX() + this.width, originDot.getY(), originDot.getZ());
+        this.dots[2] = new Dot3D(originDot.getX() + this.width, originDot.getY() + this.height, originDot.getZ());
+        this.dots[3] = new Dot3D(originDot.getX(), originDot.getY() + height, originDot.getZ());
+        this.dots[4] = new Dot3D(originDot.getX(), originDot.getY(), originDot.getZ() + this.depth);
+        this.dots[5] = new Dot3D(originDot.getX() + this.width , originDot.getY(), originDot.getZ() + this.depth);;
+        this.dots[6] = new Dot3D(originDot.getX() + this.width, originDot.getY() + this.height, originDot.getZ() + this.depth);;
+        this.dots[7] = new Dot3D(originDot.getX(), originDot.getY() + this.height, originDot.getZ() + this.depth);;
 
-        width = givenWidth;
-        height = givenHeight;
+        // XY
+        this.vectors[0] = new Vector3D(dots[0], dots[1]);
+        this.vectors[1] = new Vector3D(dots[1], dots[2]);
+        this.vectors[2] = new Vector3D(dots[2], dots[3]);
+        this.vectors[3] = new Vector3D(dots[3], dots[0]);
+
+        // ZY
+        this.vectors[4] = new Vector3D(dots[0], dots[4]);
+        this.vectors[5] = new Vector3D(dots[1], dots[5]);
+        this.vectors[6] = new Vector3D(dots[2], dots[6]);
+        this.vectors[7] = new Vector3D(dots[3], dots[7]);
+
+        // ZX
+        this.vectors[8] = new Vector3D(dots[4], dots[5]);
+        this.vectors[9] = new Vector3D(dots[5], dots[6]);
+        this.vectors[10] = new Vector3D(dots[6], dots[7]);
+        this.vectors[11] = new Vector3D(dots[7], dots[4]);
+
+        this.textures = textures;
 
     }
 

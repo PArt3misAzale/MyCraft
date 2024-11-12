@@ -4,7 +4,7 @@ import static java.lang.Math.*;
 
 public class SeedVariables {
 
-    private int seed;
+    private final int seed;
 
     public SeedVariables(int seedValue) {
 

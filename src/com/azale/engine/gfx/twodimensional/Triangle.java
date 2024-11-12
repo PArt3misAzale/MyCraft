@@ -1,4 +1,4 @@
-package com.azale.engine.gfx.threedimensional.objects;
+package com.azale.engine.gfx.twodimensional;
 
 import com.azale.engine.gfx.threedimensional.Dot3D;
 import com.azale.engine.gfx.threedimensional.Vector3D;

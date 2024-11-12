@@ -4,7 +4,7 @@ import com.azale.engine.GameContainer;
 import com.azale.engine.gfx.Image;
 import com.azale.engine.gfx.ImageTile;
 import com.azale.engine.gfx.threedimensional.Vector3D;
-import com.azale.engine.gfx.objects.Triangle2D;
+import com.azale.engine.gfx.twodimensional.objects.Triangle2D;
 
 import java.awt.image.DataBufferInt;
 

@@ -4,7 +4,6 @@ import com.azale.engine.inputs.Input;
 import com.azale.engine.renderer.Renderer;
 import com.azale.maingameinfo.worldgeneration.biomemap.NoiseMap;
 
-import java.awt.*;
 
 public class GameContainer implements Runnable {
 
@@ -61,8 +60,9 @@ public class GameContainer implements Runnable {
 
     public void run() {
 
-        noiseMap.paint();
+        // noiseMap.paint();
 
+        // ------------------------------------- //
         running = true;
 
         boolean render = false;
@@ -102,7 +102,7 @@ public class GameContainer implements Runnable {
                     fps = frames;
                     frames = 0;
 
-                    System.out.println("Fps : " + fps);
+                    // System.out.println("Fps : " + fps);
 
                 }
 

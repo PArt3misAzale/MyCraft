@@ -2,6 +2,7 @@ package com.azale.engine.gfx;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 public class Image {
@@ -15,7 +16,9 @@ public class Image {
 
         try {
 
-            image = ImageIO.read(Image.class.getResourceAsStream(path));
+            File imageFile = new File(path);
+            image = ImageIO.read(imageFile);
+            //image = ImageIO.read(Image.class.getResourceAsStream(path));
 
         } catch (IOException e) {
 
