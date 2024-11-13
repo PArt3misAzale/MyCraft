@@ -81,9 +81,9 @@ public class Vector3D {
 
     }
 
-    public String consoleOut() {
+    public void consoleOut() {
 
-        return "( " + vector[0] + " , " + vector[1] + " , " + vector[2] + " , " + vector[3] + " )";
+        System.out.println("( " + vector[0] + " , " + vector[1] + " , " + vector[2] + " )");
 
     }
 

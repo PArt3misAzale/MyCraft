@@ -12,6 +12,21 @@ public class Dot2D {
 
     }
 
+    public void consoleOut() {
+
+        System.out.println("( " + getX() + " , " + getY() + " )");
+
+    }
+
+    public Dot2D resize(int scale) {
+
+        this.x = this.x * scale;
+        this.y = this.y * scale;
+
+        return this;
+
+    }
+
     /*
 
     GETTERS AND SETTERS
@@ -30,4 +45,15 @@ public class Dot2D {
 
     }
 
+    public void setX(double x) {
+
+        this.x = x;
+
+    }
+
+    public void setY(double y) {
+
+        this.y = y;
+
+    }
 }

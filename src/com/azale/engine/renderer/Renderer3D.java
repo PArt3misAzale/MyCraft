@@ -1,10 +1,9 @@
 package com.azale.engine.renderer;
 
-import com.azale.engine.gfx.threedimensional.Vector3D;
+import com.azale.engine.gfx.threedimensional.Dot3D;
 import com.azale.engine.gfx.threedimensional.objects.Camera;
-import com.azale.engine.gfx.threedimensional.objects.CameraObjectVector3D;
 import com.azale.engine.gfx.threedimensional.objects.Cube3D;
-import com.azale.engine.gfx.twodimensional.objects.Cube2D;
+import com.azale.engine.gfx.twodimensional.Dot2D;
 
 public class Renderer3D {
 
@@ -13,8 +12,6 @@ public class Renderer3D {
 
     Camera camera;
 
-    CameraObjectVector3D cameraObjectVector3D;
-
     public Renderer3D(Camera camera, double defaultFov) {
 
         this.defaultFov = defaultFov;
@@ -22,56 +19,34 @@ public class Renderer3D {
 
     }
 
-    public void transformCube3DIn2D(Cube3D cube) {
+    public Dot2D[] transformCube3DIn2D(Cube3D cube) {
 
-        // get the vectors of the object's dots and camera :
-        cameraObjectVector3D = new CameraObjectVector3D(camera, cube);
-        Vector3D[] cameraVectors = cameraObjectVector3D.getVectors();
+        // line 2D :
+        Dot2D[] dots = new Dot2D[8];
 
-        for (int i = 0; i < 8; i ++) {
+        for (int i = 0; i < 8; i++) {
 
-            System.out.println("Camera vector " + i + " : " + cameraVectors[i].consoleOut()); // working
+            dots[i] = new Dot2D(0,0);
+            dots[i].setY(LineEquationY(camera.getPosition(), cube.getDot(i), defaultFov));
+            dots[i].setX(LineEquationX(camera.getPosition(), cube.getDot(i), defaultFov));
 
-        }
-
-        Vector3D[] cubeLines = getCubeLines(cameraVectors, cube);
-
-        for (int i = 0; i < 12 ; i++) {
-
-            System.out.println("Cube lines " + i + " : " + cubeLines[i].consoleOut());
+            dots[i].consoleOut();
 
         }
 
-        // Camera work :
-        Cube2D cube2D = new Cube2D(cube, "z");
-
-        //SquareToDraw std = new SquareToDraw();
+        return dots;
 
     }
 
-    public Vector3D[] getCubeLines(Vector3D[] cameraVectors, Cube3D cube) {
+    public double LineEquationY(Dot3D c, Dot3D m, double x) {
 
-        Vector3D[] vectors = new Vector3D[12];
+        return ( ( c.getY() - m.getY() ) / ( c.getZ() - m.getZ() ) ) * x + ( ( m.getY() * c.getZ() - c.getY() * m.getZ() ) / ( c.getZ() - m.getZ() ) );
 
-        // XY
-        vectors[0] = cameraVectors[0].substract(cameraVectors[1]);
-        vectors[1] = cameraVectors[1].substract(cameraVectors[2]);
-        vectors[2] = cameraVectors[2].substract(cameraVectors[3]).invert();
-        vectors[3] = cameraVectors[3].substract(cameraVectors[0]).invert();
+    }
 
-        // YZ
-        vectors[4] = cameraVectors[0].substract(cameraVectors[4]);
-        vectors[5] = cameraVectors[1].substract(cameraVectors[5]);
-        vectors[6] = cameraVectors[2].substract(cameraVectors[6]);
-        vectors[7] = cameraVectors[3].substract(cameraVectors[7]);
+    public double LineEquationX(Dot3D c, Dot3D m, double x) {
 
-        // ZX
-        vectors[8] = cameraVectors[4].substract(cameraVectors[5]);
-        vectors[9] = cameraVectors[5].substract(cameraVectors[6]);
-        vectors[10] = cameraVectors[6].substract(cameraVectors[7]).invert();
-        vectors[11] = cameraVectors[7].substract(cameraVectors[4]).invert();
-
-        return vectors;
+        return ( ( c.getX() - m.getX() ) / ( c.getZ() - m.getZ() ) ) * x + ( ( m.getX() * c.getZ() - c.getX() * m.getZ() ) / ( c.getZ() - m.getZ() ) );
 
     }
 

@@ -6,6 +6,7 @@ import com.azale.engine.gfx.Image;
 import com.azale.engine.gfx.twodimensional.CubeTexture;
 import com.azale.engine.gfx.threedimensional.Dot3D;
 import com.azale.engine.gfx.threedimensional.objects.Camera;
+import com.azale.engine.gfx.twodimensional.Dot2D;
 import com.azale.engine.renderer.Renderer;
 import com.azale.engine.renderer.Renderer3D;
 import com.azale.maingameinfo.game.objects.blocks.DirtBlock;
@@ -14,16 +15,17 @@ public class GameManager extends AbstractGame {
 
     private Renderer3D renderer3D;
     private Camera camera;
-    double FOV = 10;
+    double FOV = 2;
 
     Image[] dirtImages;
     CubeTexture dirtTexture;
 
-    DirtBlock DIRT_BLOCK = new DirtBlock(new Dot3D(3, 5, 13), 4, 4, 4, dirtTexture);
+    DirtBlock DIRT_BLOCK = new DirtBlock(new Dot3D(1, 1, 3), 1, 1, 1, dirtTexture);
+    Dot2D[] dirtBlockDots;
 
     public GameManager() {
 
-        camera = new Camera(new Dot3D(0, 4, 0));
+        camera = new Camera(new Dot3D(0, 1.5, 0));
         renderer3D = new Renderer3D(camera, FOV);
 
     }
@@ -37,7 +39,8 @@ public class GameManager extends AbstractGame {
 
         dirtTexture = new CubeTexture(dirtImages, 0);
 
-        renderer3D.transformCube3DIn2D(DIRT_BLOCK);
+        dirtBlockDots = new Dot2D[8];
+        dirtBlockDots = renderer3D.transformCube3DIn2D(DIRT_BLOCK);
 
         System.out.println("Fps : " + gc.fps);
 
@@ -45,6 +48,8 @@ public class GameManager extends AbstractGame {
 
     @Override
     public void render(GameContainer gc, Renderer r) {
+
+        gc.renderer.draw2DCube(dirtBlockDots);
 
         /*
         gc.renderer.drawRect(100, 100, 40, 40, 0xffffffff);

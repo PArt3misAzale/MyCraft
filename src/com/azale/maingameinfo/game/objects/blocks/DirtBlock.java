@@ -12,45 +12,15 @@ public class DirtBlock extends Cube3D {
     Dot3D originDot;
 
     /**
-     * EXEMPLES
-     * <p>If {@link DirtBlock} is at (0,0,0)
-     *
-     * <p>- {@link Dot3D} of the {@link DirtBlock} :
-     * <p>Dot 0 : (0,0,0)
-     * <p>Dot 1 : (1,0,0)
-     * <p>Dot 2 : (0,1,0)
-     * <p>Dot 3 : (1,1,0)
-     * <p>Dot 4 : (0,0,1)
-     * <p>Dot 5 : (1,0,1)
-     * <p>Dot 6 : (0,1,1)
-     * <p>Dot 7 : (1,1,1)
-     *
-     * <p>VARIBALES
-     * <p>- {@link Vector3D} of the {@link DirtBlock} :
-     * <p>Vertex 0 : ({@code dot0}, {@code dot1})
-     * <p>Vertex 1 : ({@code dot2}, {@code dot3})
-     * <p>Vertex 2 : ({@code dot4}, {@code dot5})
-     * <p>Vertex 3 : ({@code dot6}, {@code dot7})
-     * <p>Vertex 4 : ({@code dot0}, {@code dot2})
-     * <p>Vertex 5 : ({@code dot1}, {@code dot3})
-     * <p>Vertex 6 : ({@code dot4}, {@code dot6})
-     * <p>Vertex 7 : ({@code dot5}, {@code dot7})
-     *
      * <p>- Dimensions of the {@link DirtBlock} :
      * <p>Width = {@code width}
      * <p>Height = {@code height}
      *
      * <p>PARAMETERS
-     * @param dot0
-     * @param dot1
-     * @param dot2
-     * @param dot3
-     * @param dot4
-     * @param dot5
-     * @param dot6
-     * @param dot7
-     * @param givenWidth
-     * @param givenHeight
+     * @param originDot
+     * @param width
+     * @param height
+     * @param textures
      */
 
     public DirtBlock(Dot3D originDot,

@@ -33,4 +33,16 @@ public class Cube3D extends Object3D {
         this.vectors = lines;
 
     }
+
+    public Dot3D[] getDots() {
+
+        return dots;
+
+    }
+
+    public Dot3D getDot(int i) {
+
+        return dots[i];
+
+    }
 }
