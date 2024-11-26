@@ -319,6 +319,67 @@ public class Renderer {
 
     public void drawFillTriangle(Triangle2D triangle, int offX, int offY, int color, boolean inverted){
 
+        // SOLUTION 1 FOR TRIANGLES ( not the best in terms of optimizations : may be slow with tables)
+        // Get all the y for the three sides of the triangle
+        // Set the table
+        // Set 1 if side of the triangle ( = pixel filled )
+        int[] d = new int[gc.getHeight * gc.getWidth];
+        // Side : dot0 / dot1
+        for (int x = (int) triangle.dots[0].getX(); x <= (int) triangle.dots[1].getX(); x++) {
+
+            // Get Y and place it in the table
+             d[x + triangle.getEquation2D(new Vector3D(triangle.dot[0], triangle.dot[1], x)] = 1;
+            
+        }
+
+        // Side : dot1 / dot2
+        for (int x = (int) triangle.dots[1].getX(); x <= (int) triangle.dots[2].getX(); x++) {
+
+            // Get Y and place it in the table
+             d[x + triangle.getEquation2D(new Vector3D(triangle.dot[1], triangle.dot[2], x)] = 1;
+            
+        }
+
+        // Side : dot2 / dot0
+        for (int x = (int) triangle.dots[2].getX(); x <= (int) triangle.dots[0].getX(); x++) {
+
+            // Get Y and place it in the table
+             d[x + triangle.getEquation2D(new Vector3D(triangle.dot[2], triangle.dot[0], x)] = 1;
+            
+        }
+
+        // Fill the triangle table with 1 for filled
+        boolean inTriangle = false;
+        for (int i = 0; i < gc.getHeight * gc.getWdith; i++) {
+            
+            if (d[i] == 1 && inTriangle == false && (i != triangle.dots[0].getX() + (gc.getHeight * triangle.dots[0].getY()) || i != triangle.dots[1].getX() + (gc.getHeight * triangle.dots[1].getY()) || i != triangle.dots[2].getX() + (gc.getHeight * triangle.dots[2].getY())) { inTriangle = true; }
+            elif (d[i] == 1 && inTriangle == true) { inTriangle = false; }
+
+            if (d[i] == 0 && inTriangle == true) {
+                d[i] = 1;
+            }
+                
+        }
+
+        for (int y = 0; y < gc.getHeight; y++) {
+
+            for (int x = 0; x < gc.getWidth; x++) {
+
+                if (d[x + y * gc.getHeight] == 1) {
+
+                    setPixel(x, y, color)
+
+                }       
+
+            }
+
+        }
+        
+
+// ------------------------------------------------------------------------------------------------------------------------------- //
+
+        
+        /*
         for (int i = (int) (triangle.dots[2].getX() - triangle.dots[0].getX()); i > 0; i--)
             if (!inverted) {
 
@@ -346,7 +407,7 @@ public class Renderer {
 
                     setPixel(x + offX, offY + triangle.getVectorEquation2D(new Vector3D(triangle.dots[0], triangle.dots[1]), x), color);
 
-                }
+                }*/
 /*
             for (int x = (int) triangle.dots[2].getX(); x <= (int) triangle.dots[1].getX(); x++) {
 
