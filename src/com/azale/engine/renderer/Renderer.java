@@ -319,6 +319,37 @@ public class Renderer {
 
     public void drawFillTriangle(Triangle2D triangle, int offX, int offY, int color, boolean inverted){
 
+        // PROF METHOD
+        // Xs
+        int minX, maxX;
+        int[][] vects = new int[3][2];
+        // first dot : dots[0]
+        if (triangle.dots[0].getX() < triangle.dots[1].getX() && triangle.dots[0].getX() < triangle.dots[2].getX()) {
+            minX = (int)triangle.dots[0].getX();
+            vects[0][1] =
+        }
+        else if (triangle.dots[0].getX() > triangle.dots[1].getX() && triangle.dots[0].getX() > triangle.dots[2].getX()) {maxX = (int)triangle.dots[0].getX();}
+        // second dot : dots[1]
+        else if (triangle.dots[1].getX() < triangle.dots[0].getX() && triangle.dots[1].getX() < triangle.dots[2].getX()) {minX = (int)triangle.dots[1].getX();}
+        else if (triangle.dots[1].getX() > triangle.dots[0].getX() && triangle.dots[1].getX() > triangle.dots[2].getX()) {maxX = (int)triangle.dots[1].getX();}
+        // third dot : dots[2]
+        else if (triangle.dots[2].getX() < triangle.dots[0].getX() && triangle.dots[2].getX() < triangle.dots[1].getX()) {minX = (int)triangle.dots[2].getX();}
+        else if (triangle.dots[2].getX() > triangle.dots[0].getX() && triangle.dots[2].getX() > triangle.dots[1].getX()) {maxX = (int)triangle.dots[2].getX();}
+
+        for (int x = minX; x <= maxX, x++) {
+
+            if () {
+
+
+
+            }
+
+        }
+
+
+
+
+        /*
         // SOLUTION 1 FOR TRIANGLES ( not the best in terms of optimizations : may be slow with tables)
         // Get all the y for the three sides of the triangle
         // Set the table
@@ -378,8 +409,6 @@ public class Renderer {
 
 // ------------------------------------------------------------------------------------------------------------------------------- //
 
-        
-        /*
         for (int i = (int) (triangle.dots[2].getX() - triangle.dots[0].getX()); i > 0; i--)
             if (!inverted) {
 
@@ -407,8 +436,8 @@ public class Renderer {
 
                     setPixel(x + offX, offY + triangle.getVectorEquation2D(new Vector3D(triangle.dots[0], triangle.dots[1]), x), color);
 
-                }*/
-/*
+                }
+
             for (int x = (int) triangle.dots[2].getX(); x <= (int) triangle.dots[1].getX(); x++) {
 
                 setPixel(x + offX, offY + triangle.getVectorEquation2D(new Vector3D(triangle.dots[1], triangle.dots[2]), x), color);
@@ -487,7 +516,6 @@ public class Renderer {
 
          */
 
-    }
 
     // 3D TO 2D :
     public void draw2DCube(Dot2D[] dots) {
@@ -512,9 +540,12 @@ public class Renderer {
         dots[6].consoleOut();
         dots[7].consoleOut();
 
+
+
+
         //drawFillTriangle(new Triangle2D(new Dot3D(200,350,0),new Dot3D(100,350,0), new Dot3D(266,366,0)), 100, 100, 0xff0000ff);
-        drawFillTriangle(new Triangle2D(new Dot3D(dots[0].getX(), dots[0].getY() , 0), new Dot3D(dots[1].getX(), dots[1].getY() , 0), new Dot3D(dots[2].getX(), dots[2].getY() , 0)), (int)(gc.getWidth()/2 + dots[0].getX()), (int)(gc.getHeight()/2 - dots[0].getY()), 0xff00ff00, false);
-        drawFillTriangle(new Triangle2D(new Dot3D(dots[0].getX(), dots[0].getY() , 0), new Dot3D(dots[1].getX(), dots[1].getY() , 0), new Dot3D(dots[2].getX(), dots[2].getY() , 0)), (int)(gc.getWidth()/2 + dots[0].getX()), (int)(gc.getHeight()/2 - dots[0].getY()), 0xffffffff, true);
+        //drawFillTriangle(new Triangle2D(new Dot3D(dots[0].getX(), dots[0].getY() , 0), new Dot3D(dots[1].getX(), dots[1].getY() , 0), new Dot3D(dots[2].getX(), dots[2].getY() , 0)), (int)(gc.getWidth()/2 + dots[0].getX()), (int)(gc.getHeight()/2 - dots[0].getY()), 0xff00ff00, false);
+        //drawFillTriangle(new Triangle2D(new Dot3D(dots[0].getX(), dots[0].getY() , 0), new Dot3D(dots[1].getX(), dots[1].getY() , 0), new Dot3D(dots[2].getX(), dots[2].getY() , 0)), (int)(gc.getWidth()/2 + dots[0].getX()), (int)(gc.getHeight()/2 - dots[0].getY()), 0xffffffff, true);
 
 
         //drawFillTriangle(new Triangle2D(new Dot3D(dots[7].getX() , dots[7].getY() , 0), new Dot3D(dots[2].getX(), dots[2].getY() , 0), new Dot3D(dots[6].getX(), dots[6].getY() , 0)), (int) (gc.getWidth()/2 - dots[7].getX()), (int) (gc.getHeight()/2 - dots[7].getX()), 0xffff0000);
