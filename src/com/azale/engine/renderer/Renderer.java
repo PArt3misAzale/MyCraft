@@ -326,7 +326,7 @@ public class Renderer {
         // first dot : dots[0]
         if (triangle.dots[0].getX() < triangle.dots[1].getX() && triangle.dots[0].getX() < triangle.dots[2].getX()) {
             minX = (int)triangle.dots[0].getX();
-            vects[0][1] =
+            //vects[0][1] =
         }
         else if (triangle.dots[0].getX() > triangle.dots[1].getX() && triangle.dots[0].getX() > triangle.dots[2].getX()) {maxX = (int)triangle.dots[0].getX();}
         // second dot : dots[1]
@@ -336,6 +336,7 @@ public class Renderer {
         else if (triangle.dots[2].getX() < triangle.dots[0].getX() && triangle.dots[2].getX() < triangle.dots[1].getX()) {minX = (int)triangle.dots[2].getX();}
         else if (triangle.dots[2].getX() > triangle.dots[0].getX() && triangle.dots[2].getX() > triangle.dots[1].getX()) {maxX = (int)triangle.dots[2].getX();}
 
+        /*
         for (int x = minX; x <= maxX, x++) {
 
             if () {
@@ -344,7 +345,7 @@ public class Renderer {
 
             }
 
-        }
+        }*/
 
 
 
