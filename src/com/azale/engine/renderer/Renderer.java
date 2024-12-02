@@ -317,38 +317,40 @@ public class Renderer {
 
     }
 
-    public void drawFillTriangle(Triangle2D triangle, int offX, int offY, int color, boolean inverted){
+    public void drawFillTriangle(Triangle2D triangle, int offX, int offY, int color){
 
         // PROF METHOD
-        // Xs
-        int minX, maxX;
-        int[][] vects = new int[3][2];
-        // first dot : dots[0]
-        if (triangle.dots[0].getX() < triangle.dots[1].getX() && triangle.dots[0].getX() < triangle.dots[2].getX()) {
-            minX = (int)triangle.dots[0].getX();
-            //vects[0][1] =
-        }
-        else if (triangle.dots[0].getX() > triangle.dots[1].getX() && triangle.dots[0].getX() > triangle.dots[2].getX()) {maxX = (int)triangle.dots[0].getX();}
-        // second dot : dots[1]
-        else if (triangle.dots[1].getX() < triangle.dots[0].getX() && triangle.dots[1].getX() < triangle.dots[2].getX()) {minX = (int)triangle.dots[1].getX();}
-        else if (triangle.dots[1].getX() > triangle.dots[0].getX() && triangle.dots[1].getX() > triangle.dots[2].getX()) {maxX = (int)triangle.dots[1].getX();}
-        // third dot : dots[2]
-        else if (triangle.dots[2].getX() < triangle.dots[0].getX() && triangle.dots[2].getX() < triangle.dots[1].getX()) {minX = (int)triangle.dots[2].getX();}
-        else if (triangle.dots[2].getX() > triangle.dots[0].getX() && triangle.dots[2].getX() > triangle.dots[1].getX()) {maxX = (int)triangle.dots[2].getX();}
+        for (int x = 0; x < gc.getWidth(); x++) {
 
-        /*
-        for (int x = minX; x <= maxX, x++) {
+            if (triangle.dots[0].getY() < triangle.getVectorEquation2D(new Vector3D(triangle.dots[1], triangle.dots[2]), x)
+                    && triangle.dots[1].getY() > triangle.getVectorEquation2D(new Vector3D(triangle.dots[2], triangle.dots[0]), x)
+                    && triangle.dots[2].getY() > triangle.getVectorEquation2D(new Vector3D(triangle.dots[0], triangle.dots[1]), x)) {
 
-            if () {
+                System.out.println("DOT 0 Y est inf à la droite (DOT 1, DOT 2)");
+                System.out.println("DOT 1 Y est sup à la droite (DOT 2, DOT 0)");
+                System.out.println("DOT 2 Y est sup à la droite (DOT 0, DOT 1)");
+                System.out.println("\n");
 
+                triangle.dots[0].consoleOut();
+                triangle.dots[1].consoleOut();
+                triangle.dots[2].consoleOut();
 
+                for (int t = 0; t < 1000; t++){
+
+                    setPixel((int) (offX + (triangle.dots[0].getX() +(triangle.dots[1].getX() - triangle.dots[0].getX()) * t/1000)), (int) (offY + (triangle.dots[0].getY() +(triangle.dots[1].getY() - triangle.dots[0].getY()) * t/1000)), color);
+                    setPixel((int) (offX + (triangle.dots[1].getX() +(triangle.dots[2].getX() - triangle.dots[1].getX()) * t/1000)), (int) (offY + (triangle.dots[1].getY() +(triangle.dots[2].getY() - triangle.dots[1].getY()) * t/1000)), color);
+                    setPixel((int) (offX + (triangle.dots[2].getX() +(triangle.dots[0].getX() - triangle.dots[2].getX()) * t/1000)), (int) (offY + (triangle.dots[2].getY() +(triangle.dots[0].getY() - triangle.dots[2].getY()) * t/1000)), color);
+
+                }
+
+                /*
+                setPixel(offX + x, offY + triangle.getVectorEquation2D(new Vector3D(triangle.dots[0], triangle.dots[1]), x), color);
+                setPixel(offX + x, offY + triangle.getVectorEquation2D(new Vector3D(triangle.dots[1], triangle.dots[2]), x), color);
+                setPixel(offX + x, offY + triangle.getVectorEquation2D(new Vector3D(triangle.dots[2], triangle.dots[0]), x), color);*/
 
             }
 
-        }*/
-
-
-
+        }
 
         /*
         // SOLUTION 1 FOR TRIANGLES ( not the best in terms of optimizations : may be slow with tables)
@@ -541,7 +543,7 @@ public class Renderer {
         dots[6].consoleOut();
         dots[7].consoleOut();
 
-
+        drawFillTriangle(new Triangle2D(new Dot3D(0,0,0),new Dot3D(100,350,0), new Dot3D(266,366,0)), 100, 100, 0xffffffff);
 
 
         //drawFillTriangle(new Triangle2D(new Dot3D(200,350,0),new Dot3D(100,350,0), new Dot3D(266,366,0)), 100, 100, 0xff0000ff);
