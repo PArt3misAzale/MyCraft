@@ -317,9 +317,46 @@ public class Renderer {
 
     }
 
+    private int intersection(int x0, int y0, int x1, int y1, int y) {
+        if (y0 == y1) {return Integer.MAX_VALUE;}
+
+        int xIntersect = x0 + (y - y0) * (x1 - x0) / (y1 - y0);
+        return xIntersect;
+    }
+
     public void drawFillTriangle(Triangle2D triangle, int offX, int offY, int color){
 
+        // CHATGPT METHOD
+        int minX = (int) Math.min(triangle.dots[0].getX(), Math.min(triangle.dots[1].getX(), triangle.dots[2].getX()));
+        int maxX = (int) Math.max(triangle.dots[0].getX(), Math.max(triangle.dots[1].getX(), triangle.dots[2].getX()));
+        int minY = (int) Math.min(triangle.dots[0].getY(), Math.min(triangle.dots[1].getY(), triangle.dots[2].getY()));
+        int maxY = (int) Math.max(triangle.dots[0].getY(), Math.max(triangle.dots[1].getY(), triangle.dots[2].getY()));
+
+        for (int y = minY; y <= maxY; y++) {
+
+            // calculate intersections
+            int[] intersectX = new int[3];
+            int count = 0;
+
+            intersectX[count++] = intersection((int) triangle.dots[0].getX(), (int) triangle.dots[0].getY(), (int) triangle.dots[1].getX(), (int) triangle.dots[1].getY(), y);
+            intersectX[count++] = intersection((int) triangle.dots[1].getX(), (int) triangle.dots[1].getY(), (int) triangle.dots[2].getX(), (int) triangle.dots[2].getY(), y);
+            intersectX[count++] = intersection((int) triangle.dots[2].getX(), (int) triangle.dots[2].getY(), (int) triangle.dots[0].getX(), (int) triangle.dots[0].getY(), y);
+
+            // sort intersections
+            java.util.Arrays.sort(intersectX);
+
+            System.out.println(intersectX[0]);
+
+            for (int x = intersectX[0]; x <= intersectX[1]; x++) {
+
+                setPixel(x, y, color);
+
+            }
+
+        }
+
         // PROF METHOD
+        /*
         for (int x = 0; x < gc.getWidth(); x++) {
 
             if (triangle.dots[0].getY() < triangle.getVectorEquation2D(new Vector3D(triangle.dots[1], triangle.dots[2]), x)
@@ -341,18 +378,18 @@ public class Renderer {
                     setPixel((int) (offX + (triangle.dots[1].getX() +(triangle.dots[2].getX() - triangle.dots[1].getX()) * t/1000)), (int) (offY + (triangle.dots[1].getY() +(triangle.dots[2].getY() - triangle.dots[1].getY()) * t/1000)), color);
                     setPixel((int) (offX + (triangle.dots[2].getX() +(triangle.dots[0].getX() - triangle.dots[2].getX()) * t/1000)), (int) (offY + (triangle.dots[2].getY() +(triangle.dots[0].getY() - triangle.dots[2].getY()) * t/1000)), color);
 
-                }
+                } */
 
                 /*
                 setPixel(offX + x, offY + triangle.getVectorEquation2D(new Vector3D(triangle.dots[0], triangle.dots[1]), x), color);
                 setPixel(offX + x, offY + triangle.getVectorEquation2D(new Vector3D(triangle.dots[1], triangle.dots[2]), x), color);
-                setPixel(offX + x, offY + triangle.getVectorEquation2D(new Vector3D(triangle.dots[2], triangle.dots[0]), x), color);*/
+                setPixel(offX + x, offY + triangle.getVectorEquation2D(new Vector3D(triangle.dots[2], triangle.dots[0]), x), color);
 
             }
 
         }
 
-        /*
+
         // SOLUTION 1 FOR TRIANGLES ( not the best in terms of optimizations : may be slow with tables)
         // Get all the y for the three sides of the triangle
         // Set the table
@@ -544,7 +581,6 @@ public class Renderer {
         dots[7].consoleOut();
 
         drawFillTriangle(new Triangle2D(new Dot3D(0,0,0),new Dot3D(100,350,0), new Dot3D(266,366,0)), 100, 100, 0xffffffff);
-
 
         //drawFillTriangle(new Triangle2D(new Dot3D(200,350,0),new Dot3D(100,350,0), new Dot3D(266,366,0)), 100, 100, 0xff0000ff);
         //drawFillTriangle(new Triangle2D(new Dot3D(dots[0].getX(), dots[0].getY() , 0), new Dot3D(dots[1].getX(), dots[1].getY() , 0), new Dot3D(dots[2].getX(), dots[2].getY() , 0)), (int)(gc.getWidth()/2 + dots[0].getX()), (int)(gc.getHeight()/2 - dots[0].getY()), 0xff00ff00, false);
